@@ -1,10 +1,9 @@
 docker-openldap
 ===============
 
-The image is based on alpine .  The Dockerfile is inspired by
-[cnry/openldap](https://registry.hub.docker.com/u/cnry/openldap/), but as said
-before, running a stable Debian and be a little less verbose, but more complete
-in the configuration.
+The image is based on alpine .  
+The Dockerfile is inspired by
+[dinkel/openldap](https://hub.docker.com/r/dinkel/openldap/)
 
 NOTE: On purpose, there is no secured channel (TLS/SSL), because I believe that
 this service should never be exposed to the internet, but only be used directly
