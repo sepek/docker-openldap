@@ -1,7 +1,7 @@
 docker-openldap
 ===============
 
-The image is based on Debian stable ("jessie" at the moment).  The Dockerfile is inspired by
+The image is based on alpine .  The Dockerfile is inspired by
 [cnry/openldap](https://registry.hub.docker.com/u/cnry/openldap/), but as said
 before, running a stable Debian and be a little less verbose, but more complete
 in the configuration.
@@ -16,12 +16,12 @@ Usage
 The most simple form would be to start the application like so (however this is
 not the recommended way - see below):
 
-    docker run -d -p 389:389 -e SLAPD_PASSWORD=mysecretpassword -e SLAPD_DOMAIN=ldap.example.org dinkel/openldap
+    docker run -d -p 389:389 -e SLAPD_PASSWORD=mysecretpassword -e SLAPD_DOMAIN=ldap.example.org danielguerra/alpine-openldap
 
 To get the full potential this image offers, one should first create a data-only
 container (see "Data persistence" below), start the OpenLDAP daemon as follows:
 
-    docker run -d --name openldap --volumes-from your-data-container dinkel/openldap
+    docker run -d --name openldap --volumes-from your-data-container danielguerra/alpine-openldap
 
 An application talking to OpenLDAP should then `--link` the container:
 
@@ -35,8 +35,7 @@ Configuration (environment variables)
 
 For the first run, one has to set at least the first two environment variables.
 After the first start of the image (and the initial configuration), these
-envirnonment variables are not evaluated again (see the
-`SLAPD_FORCE_RECONFIGURE` option).
+envirnonment variables are not evaluated again.
 
 * `SLAPD_PASSWORD` (required) - sets the password for the `admin` user.
 * `SLAPD_DOMAIN` (required) - sets the DC (Domain component) parts. E.g. if one sets
@@ -55,9 +54,6 @@ available: `collective`, `corba`, `duaconf`, `dyngroup`, `java`, `misc`, `openld
 to run `.ldif` files with a corresponsing name from the `module` directory.
 Currently only `memberof` and `ppolicy` are avaliable.
 
-* `SLAPD_FORCE_RECONFIGURE` - (defaults to false)  Used if one needs to reconfigure
-the `slapd` service after the image has been initialized.  Set this value to `true`
-to reconfigure the image.
 
 ### Setting up ppolicy
 
@@ -119,7 +115,7 @@ on the available attributes and what they mean.
 
 ## Data persistence
 
-The image exposes two directories (`VOLUME ["/etc/ldap", "/var/lib/ldap"]`).
+The image exposes two directories (`VOLUME ["/etc/openldap", "/var/lib/openldap"]`).
 The first holds the "static" configuration while the second holds the actual
 database. Please make sure that these two directories are saved (in a data-only
 container or alike) in order to make sure that everything is restored after a

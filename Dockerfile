@@ -1,25 +1,21 @@
-FROM debian:jessie
+FROM alpine
 
-MAINTAINER Christian Luginbühl <dinkel@pimprecords.com>
+MAINTAINER Daniel Guerra
 
-ENV OPENLDAP_VERSION 2.4.40
+ENV OPENLDAP_VERSION 2.4.44-r0
 
-RUN apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y \
-        slapd=${OPENLDAP_VERSION}* && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-
-RUN mv /etc/ldap /etc/ldap.dist
+RUN  apk update \
+  && apk add openldap \
+  && rm -rf /var/cache/apk/*
 
 EXPOSE 389
 
-VOLUME ["/etc/ldap", "/var/lib/ldap"]
+VOLUME ["/etc/openldap-dist", "/var/lib/openldap"]
 
-COPY modules/ /etc/ldap.dist/modules
+COPY modules/ /etc/openldap/modules
 
 COPY entrypoint.sh /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]
 
-CMD ["slapd", "-d", "32768", "-u", "openldap", "-g", "openldap"]
+CMD ["slapd", "-d", "32768", "-u", "ldap", "-g", "ldap"]
