@@ -3,7 +3,7 @@ FROM alpine
 MAINTAINER Daniel Guerra
 
 RUN  apk update \
-  && apk add openldap openldap-back-mdb \
+  && apk add openldap openldap-back-mdb openldap-overlay-all \
   && rm -rf /var/cache/apk/*
 
 EXPOSE 389
